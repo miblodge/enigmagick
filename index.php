@@ -16,6 +16,14 @@
 	if($search_value > 0) {
 		$matches = $cipher->getMatchesFromText($search_value);
 		$triangle = $cipher->getTriangle($search);
+	} else {
+		// Check if search is numeric and if so evaluate...
+		if((int)$search == $search) {
+			$search_value = (int)$search;
+			$matches = $cipher->getMatchesFromText($search_value);
+			$search = $matches[0];
+			$triangle = $cipher->getTriangle($search);
+		}
 	}	
 ?><html>
 <head><title>EnigMagick</title></head>
