@@ -62,8 +62,9 @@
 			'P' => 26
 		);
 
-		function __construct() {
-			$source = dirname(__FILE__).'/../texts/liberal.txt';
+		function __construct($text_source = '') {
+			if($text_source == '') $source = dirname(__FILE__).'/../texts/liberal.txt';
+			else $source = $text_source;
 
 			$lines = file($source, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
