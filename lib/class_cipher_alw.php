@@ -63,13 +63,16 @@
 		);
 
 		function __construct($text_source = '') {
-			if($text_source == '') $source = dirname(__FILE__).'/../texts/liberal.txt';
-			else $source = $text_source;
+			if($text_source == '') {
+				$source = dirname(__FILE__).'/../texts/liberal.txt';
+				$lines = file($source, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
-			$lines = file($source, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-
-			foreach($lines as $line) {
-				$words = explode(' ',$line);
+				foreach($lines as $line) {
+					$words = explode(' ',$line);
+					foreach($words as $word) $this->text[] = $word;
+				}
+			} else {
+				$words = explode(' ',$text_source);
 				foreach($words as $word) $this->text[] = $word;
 			}
 		}

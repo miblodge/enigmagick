@@ -6,17 +6,22 @@
 <body>
 	<div class="page">
 		<div class="header">
-		<h1>EnigMagick</h1>
+			<h1>EnigMagick</h1>
 
-		<ul id="MainMenu">
-			<li><a href="index.php?search_text=<?php echo $search; ?>">Liber Al</a></li>
-			<li><a href="custom_text.php?search_text=<?php echo $search; ?>">Custom text</a></li>
-		</ul>
+			<div class="menu">
+			<ul id="MainMenu">
+				<li><a href="index.php?search_text=<?php echo $search; ?>">Liber Al</a></li>
+				<li><a href="custom_text.php?search_text=<?php echo $search; ?>">Custom text</a></li>
+			</ul>
+			<br style="clear:left"/>
+			</div>
 		</div>
 
 		<div class="search-form">
-			<form>
+			<form method='post'>
 			<p>Search: <input type='text' name="search_text" value="<?php echo $search; ?>" /></p>
+
+			<?php if($form == 'custom') { ?><p>Custom Text: <textarea name="text_source"><?php echo $text_source; ?></textarea></p><?php } ?>
 
 			<p><input type="submit" value="Apply Cipher" />
 			</form>
@@ -83,7 +88,7 @@
 
 			<div class="matches">
 			<?php if($search_value > 0) { ?>
-			<p>Matches from <?php if($text_source == '') { ?>Liber Al<?php } else { ?>Custom Text<?php } ?>:
+			<p>Matches from <?php echo $source_name; ?>:
 
 			<?php if(empty($matches)) { ?>
 			<em>None</em>

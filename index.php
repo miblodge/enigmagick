@@ -1,6 +1,8 @@
 <?php
 	$search = '';
-	if(isset($_GET["search_text"])) $search = $_GET["search_text"]; 
+	if(isset($_REQUEST["search_text"])) $search = $_REQUEST["search_text"]; 
+	$text_source = '';
+	$source_name = 'Liber Al';
 
 	//echo $search.' ';
 
@@ -26,5 +28,7 @@
 		}
 	}	
 
-	include('themes/default/page.php');
+	$form = 'default';
+
+	include 'theme/default/page.php';
 ?>
