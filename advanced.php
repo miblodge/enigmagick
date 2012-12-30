@@ -1,22 +1,22 @@
 <?php
 	$search = '';
 	$text_source = '';
-	if(isset($_REQUEST["search_text"])) $search = $_REQUEST["search_text"]; 
-	if(isset($_REQUEST["text_source"])) $text_source = $_REQUEST["text_source"]; 
+	$file_source = '';
+	if(isset($_REQUEST["search_text"])) $search = trim($_REQUEST["search_text"]); 
+	if(isset($_REQUEST["file_source"])) $file_source = $_REQUEST["file_source"]; 
 
-
-	if(trim($text_source) == '') {
-		$text_source = '';
+	if(trim($file_source) == '') {
+		$file_source = '';
 		$source_name = 'Liber Al';
 	} else {
-		$source_name = 'Custom Text';
+		$source_name = $file_source;
 	} 
 
-	//echo $search.' ';
+	//echo $file_source.' ';
 
 	require_once 'lib/class_cipher_alw.php';
 
-	$cipher = new cipher_alw($text_source);
+	$cipher = new cipher_alw('',$file_source);
 
 	//print_r($cipher);
 	$search_value = 0;
@@ -36,8 +36,19 @@
 		}
 	}	
 
-	$form = 'custom';
-	$form_action = 'custom_text.php';
+	$form = 'advanced';
+	$form_action = 'advanced.php';
+	//$source_files = glob('texts/' . "*.txt");
+	$source_files = array();
+
+	if (is_dir('texts')) {
+		if ($dh = opendir('texts')) {
+			while (($file = readdir($dh)) !== false) {
+				if(substr($file,-4) == '.txt') $source_files[] = $file;
+			}
+        		closedir($dh);
+    		}
+	}
 
 	include 'theme/default/page.php';
 ?>

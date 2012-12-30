@@ -62,19 +62,21 @@
 			'P' => 26
 		);
 
-		function __construct($text_source = '') {
-			if($text_source == '') {
-				$source = dirname(__FILE__).'/../texts/liberal.txt';
+		function __construct($text_source = '',$file_source = '') {
+			if($text_source != '') {
+				$words = explode(' ',$text_source);
+				foreach($words as $word) $this->text[] = $word;
+			} else {
+				if($file_source == '') $file_source = 'liberal.txt';
+				
+				$source = dirname(__FILE__).'/../texts/'.$file_source;
 				$lines = file($source, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
 				foreach($lines as $line) {
 					$words = explode(' ',$line);
 					foreach($words as $word) $this->text[] = $word;
 				}
-			} else {
-				$words = explode(' ',$text_source);
-				foreach($words as $word) $this->text[] = $word;
-			}
+			} 
 		}
 	}	
 ?>

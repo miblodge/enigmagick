@@ -1,6 +1,6 @@
 <?php
 	$search = '';
-	if(isset($_REQUEST["search_text"])) $search = $_REQUEST["search_text"]; 
+	if(isset($_REQUEST["search_text"])) $search = trim($_REQUEST["search_text"]); 
 	$text_source = '';
 	$source_name = 'Liber Al';
 
@@ -8,7 +8,7 @@
 
 	require_once 'lib/class_cipher_alw.php';
 
-	$cipher = new cipher_alw($text_source);
+	$cipher = new cipher_alw();
 
 	//print_r($cipher);
 	$search_value = 0;
@@ -29,6 +29,7 @@
 	}	
 
 	$form = 'default';
+	$form_action = 'index.php';
 
 	include 'theme/default/page.php';
 ?>
