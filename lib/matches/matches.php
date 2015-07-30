@@ -1,7 +1,7 @@
 <div class="results">
 <div class="matches">
 	<?php if($this->search_value > 0) { ?>
-		<p>Matches from <?php echo $this->source_name; ?>:
+		Matches from <?php echo $this->source_name; ?>:
 
 		<?php if(empty($this->matches)) { ?>
 			<em>None</em>
@@ -11,12 +11,11 @@
 				foreach($this->matches as $match) {
 					echo '<li><a href="'.$this->form_action.'?search_text='.$match;
 					if(isset($this->file_source)) { echo '&file_source='.$this->file_source; } 
-					echo '">'.$match.'</li>';
+					echo '">'.$match.'</a></li>';
 				}
 			?>
 			</ol>
 		<?php } ?>
-		</p>
 	<?php } ?>
 </div>
 </div>
