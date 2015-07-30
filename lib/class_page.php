@@ -32,7 +32,7 @@
 			if(file_exists(BASE_PATH.'/theme/'.$this->theme.'/'.$filename)) {
 				$path_to_file = '/theme/'.$this->theme.'/'.$filename;
 			} else {
-				$path_to_file = '/skin/default/'.$filename;
+				$path_to_file = '/theme/default/'.$filename;
 			}
 
 			if($serverpath) $path_to_file = BASE_PATH.$path_to_file;
