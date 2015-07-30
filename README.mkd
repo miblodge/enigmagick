@@ -7,7 +7,7 @@ and GPL3.
 
 Latest Version
 --------------
-0.3.0 Alpha
+0.4.0 Alpha
 
 
 Requirements
@@ -26,9 +26,15 @@ User Features
 * Values in triangles link to a search on the phrase they total
 * Each match links to a search on itself, so you can see its triangle
 
+Hidden Features
+---------------
+* Gematria of Nothing matches currently in testing. To test, manually
+add &cipher=gon to the querystring of any search in advanced mode. Not
+currently available in default or custom text modes.
+
 Admin Features
 --------------
-* Fully themable. Web admins can theme the tool to match their websites.
+* Fully theme-able. Web admins can theme the tool to match their websites.
 * All menu items can be disabled. Activate only the features you need. 
 * Install as many custom texts as you require
 * Define meta information about the texts
