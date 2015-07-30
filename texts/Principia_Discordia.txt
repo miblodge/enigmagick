@@ -2,7 +2,6 @@ The Principia Discordia
 
 Fourth Edition Introduction
 Fifth Edition Introduction
-Hypertext Edition Introduction
 A jug of wine,
 A leg of lamb
 And thou!
@@ -1684,13 +1683,3 @@ subject to epilepsy.
  
  
                          -THE GODDESS ERIS PREVAILS-
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
-Fourth Edition Afterword
-Bizarre html links and gradual HTML formatting furnished by:
-Jane Patterson (jpatters@tufts.edu) Pope, artist, and all around swell chick.
-AND
-
-
-James "Eric" Tilton, Supreme High Something of Tiltology, tilt+@cs.cmu.edu
