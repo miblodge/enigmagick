@@ -108,5 +108,53 @@
 			// return list of matches
 			return $matches;				
 		}
+
+		public function getMatchesFromTextNegValues($value) {
+			// When the cipher can include negative values,
+			// instead of going bust, we need a maximum number of words.
+			$max_words = 23;
+
+			// Keep an array of word combos ending in last word (starts empty)
+			$word_combos = array();
+			$matches = array();
+
+			// for each new word
+			foreach($this->text as $word) { 
+				//echo $word.' ';
+				$word_value = $this->calculateValue($word);
+
+				// if word matches search value, add it to matches
+				if($word_value == $value) {
+					//echo ' Single word match ['.$word.':'.$word_value.'] = '.$value.' ';
+					$matches[] = $word;
+					$word_combos = array(); // Can't go higher, reset combos.
+				} 
+
+				// else if value of word is below search value 
+				// then attempt to add of all current word combos
+				foreach($word_combos as $key => $word_combo) {
+					$words = $word_combo.' '.$word;
+					$combo_value = $this->calculateValue($words);	
+					// If matches value, add combo to matches array then discard from current array
+					if($combo_value == $value) {		
+						//echo ' Multi word match ['.$words.':'.$combo_value.'] = '.$value.' ';					
+						$matches[] = $words;
+						unset($word_combos[$key]);
+					} elseif(substr_count($words,' ') > $max_words) {
+						// If over value, simply discard, no match found.
+						unset($word_combos[$key]);
+					} else {
+						// If under value, keep for possible match with future words
+						$word_combos[$key] = $words;
+					}
+				}					
+				// Add word on its own as a new combo
+				$word_combos[] = $word;
+				
+			}
+
+			// return list of matches
+			return $matches;				
+		}
 	}
 ?>
