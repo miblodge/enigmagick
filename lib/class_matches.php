@@ -6,6 +6,7 @@
 		public $text_source = '';
 		public $file_source = '';
 		public $search_value = '';
+		public $cipher = '';
 		public $form_action = 'index.php';
 		public $matches = array();
 
@@ -16,9 +17,17 @@
 		}
 
 		function getMatches() {
-			includeClass('class_cipher_alw.php');
+			switch($this->cipher) {
+				case 'gon':
+					includeClass('class_cipher_gon.php');
+					$cipher = new cipher_gon('',$this->file_source);
+					break;
+				default:
+					includeClass('class_cipher_alw.php');
+					$cipher = new cipher_alw('',$this->file_source);
+					break;
+			}
 
-			$cipher = new cipher_alw('',$this->file_source);
 			$this->search_value = $cipher->calculateValue($this->search);
 			if($this->search_value == 0) {
 				$this->search_value = $this->search;
