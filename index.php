@@ -1,35 +1,38 @@
 <?php
+	$url = (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] == 'on')) ? 'https://' : 'http://';
+	$url .= $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']);
+
+	define('BASE_PATH',realpath('.')); // For use in PHP if needed
+	define('BASE_URL', $url); // For use in client output (css and js includes for example).
+//echo BASE_URL;
+
 	$search = '';
-	if(isset($_REQUEST["search_text"])) $search = trim($_REQUEST["search_text"]); 
 	$text_source = '';
-	$source_name = 'Liber Al';
+	$source_name = 'Liber AL';
+	if(isset($_REQUEST["search_text"])) $search = $_REQUEST["search_text"]; 
 
-	//echo $search.' ';
+	require_once(BASE_PATH.'/config/config.php');	
 
-	require_once 'lib/class_cipher_alw.php';
+	$page->search = $search;
+	$page->title = 'Search on Liber AL';	
 
-	$cipher = new cipher_alw();
+	includeClass('class_form.php');
+	$form = new SearchForm($search);
+	$form->form_action = 'index.php';
+	$page->content[] = $form;
 
-	//print_r($cipher);
-	$search_value = 0;
-	$matches = array();	
+	includeClass('class_matches.php');
+	$matches = new Matches($search);
+	$matches->text_source = $text_source;
+	$matches->source_name = $source_name;
+	$matches->getMatches();
+
+	includeClass('class_triangle.php');
+	$triangle = new Triangle($search);
+	$triangle->first_match = $matches->getFirstMatch();
 	
-	if($search != '') $search_value = $cipher->calculateValue($search);
-	if($search_value > 0) {
-		$matches = $cipher->getMatchesFromText($search_value);
-		$triangle = $cipher->getTriangle($search);
-	} else {
-		// Check if search is numeric and if so evaluate...
-		if((int)$search == $search) {
-			$search_value = (int)$search;
-			$matches = $cipher->getMatchesFromText($search_value);
-			$search = $matches[0];
-			$triangle = $cipher->getTriangle($search);
-		}
-	}	
+	$page->content[] = $triangle;
+	$page->content[] = $matches;
 
-	$form = 'default';
-	$form_action = 'index.php';
-
-	include 'theme/default/page.php';
+	$page->renderPage();
 ?>

@@ -1,9 +1,17 @@
 <?php
+	$url = (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] == 'on')) ? 'https://' : 'http://';
+	$url .= $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']);
+
+	define('BASE_PATH',realpath('.')); // For use in PHP if needed
+	define('BASE_URL', $url); // For use in client output (css and js includes for example).
+//echo BASE_URL;
+
 	$search = '';
 	$text_source = '';
 	if(isset($_REQUEST["search_text"])) $search = $_REQUEST["search_text"]; 
 	if(isset($_REQUEST["text_source"])) $text_source = $_REQUEST["text_source"]; 
 
+	require_once(BASE_PATH.'/config/config.php');
 
 	if(trim($text_source) == '') {
 		$text_source = '';
@@ -12,32 +20,28 @@
 		$source_name = 'Custom Text';
 	} 
 
-	//echo $search.' ';
+	$page->search = $search;
+	$page->title = 'Search on Custom Text';	
 
-	require_once 'lib/class_cipher_alw.php';
+	includeClass('class_form.php');
+	$form = new SearchForm($search);
+	$form->showTextSource();
+	$form->text_source = $text_source;
+	$form->form_action = 'custom_text.php';
+	$page->content[] = $form;
 
-	$cipher = new cipher_alw($text_source);
+	includeClass('class_matches.php');
+	$matches = new Matches($search);
+	$matches->text_source = $text_source;
+	$matches->source_name = $source_name;
+	$matches->getMatches();
 
-	//print_r($cipher);
-	$search_value = 0;
-	$matches = array();	
+	includeClass('class_triangle.php');
+	$triangle = new Triangle($search);
+	$triangle->first_match = $matches->getFirstMatch();
 	
-	if($search != '') $search_value = $cipher->calculateValue($search);
-	if($search_value > 0) {
-		$matches = $cipher->getMatchesFromText($search_value);
-		$triangle = $cipher->getTriangle($search);
-	} else {
-		// Check if search is numeric and if so evaluate...
-		if((int)$search == $search) {
-			$search_value = (int)$search;
-			$matches = $cipher->getMatchesFromText($search_value);
-			$search = $matches[0];
-			$triangle = $cipher->getTriangle($search);
-		}
-	}	
+	$page->content[] = $triangle;
+	$page->content[] = $matches;
 
-	$form = 'custom';
-	$form_action = 'custom_text.php';
-
-	include 'theme/default/page.php';
+	$page->renderPage();
 ?>

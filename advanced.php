@@ -1,9 +1,18 @@
 <?php
+	$url = (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] == 'on')) ? 'https://' : 'http://';
+	$url .= $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']);
+
+	define('BASE_PATH',realpath('.')); // For use in PHP if needed
+	define('BASE_URL', $url); // For use in client output (css and js includes for example).
+
 	$search = '';
 	$text_source = '';
 	$file_source = '';
-	if(isset($_REQUEST["search_text"])) $search = trim($_REQUEST["search_text"]); 
+	$cipher = '';
+	if(isset($_REQUEST["search_text"])) $search = $_REQUEST["search_text"]; 
 	if(isset($_REQUEST["file_source"])) $file_source = $_REQUEST["file_source"]; 
+	if(isset($_REQUEST["cipher"])) $cipher = $_REQUEST["cipher"]; 
+	require_once(BASE_PATH.'/config/config.php');
 
 	if(trim($file_source) == '') {
 		$file_source = '';
@@ -12,43 +21,29 @@
 		$source_name = $file_source;
 	} 
 
-	//echo $file_source.' ';
+	$page->search = $search;
+	$page->title = 'Search on Custom Text';	
 
-	require_once 'lib/class_cipher_alw.php';
+	includeClass('class_form.php');
+	$form = new SearchForm($search);
+	$form->showFiles();
+	$form->file_source = $file_source;
+	$form->form_action = 'advanced.php';
+	$page->content[] = $form;
 
-	$cipher = new cipher_alw('',$file_source);
+	includeClass('class_matches.php');
+	$matches = new Matches($search);
+	$matches->file_source = $file_source;
+	$matches->source_name = $source_name;
+	$matches->cipher = $cipher;
+	$matches->getMatches();
 
-	//print_r($cipher);
-	$search_value = 0;
-	$matches = array();	
+	includeClass('class_triangle.php');
+	$triangle = new Triangle($search);
+	$triangle->cipher = $cipher;
+	$triangle->first_match = $matches->getFirstMatch();
 	
-	if($search != '') $search_value = $cipher->calculateValue($search);
-	if($search_value > 0) {
-		$matches = $cipher->getMatchesFromText($search_value);
-		$triangle = $cipher->getTriangle($search);
-	} else {
-		// Check if search is numeric and if so evaluate...
-		if((int)$search == $search) {
-			$search_value = (int)$search;
-			$matches = $cipher->getMatchesFromText($search_value);
-			$search = $matches[0];
-			$triangle = $cipher->getTriangle($search);
-		}
-	}	
+	$page->content[] = $triangle;
+	$page->content[] = $matches;
 
-	$form = 'advanced';
-	$form_action = 'advanced.php';
-	//$source_files = glob('texts/' . "*.txt");
-	$source_files = array();
-
-	if (is_dir('texts')) {
-		if ($dh = opendir('texts')) {
-			while (($file = readdir($dh)) !== false) {
-				if(substr($file,-4) == '.txt') $source_files[] = $file;
-			}
-        		closedir($dh);
-    		}
-	}
-
-	include 'theme/default/page.php';
-?>
+	$page->renderPage();
